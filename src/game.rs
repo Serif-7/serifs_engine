@@ -13,6 +13,33 @@
 use std::ops::IndexMut;
 use std::ops::Index;
 
+#[derive(Eq)]
+pub struct Coord(u8, u8);
+
+impl Coord {
+
+    pub fn into_sq(&self) -> u8 {
+            return self.0 * 8 + self.1;
+        }
+    
+
+    pub fn new(x: u8, y: u8) -> Option<Coord> {
+        if (x < 0 || x > 7 || y < 0 || y > 7) {
+            return None;
+        }
+        else {
+            return Some(Coord(x, y));
+        }
+
+    }
+
+    pub fn new(sq: u8) -> Coord {
+        
+        return Coord(sq & (!7u8), sq & 7u8);
+    }
+
+}
+
 
 #[derive(Clone, PartialEq)]
 pub enum Color {
@@ -35,7 +62,6 @@ pub struct Piece {
     pub color: Color,
     pub ptype: PieceType,
 }
-
 
 
 //full game state
@@ -159,14 +185,14 @@ impl Game {
 
     fn enumerate_knight(&self, c: Color, sq: u8) {
 
-        let mut board_states: Vec<[Option<Piece>; 64]>;
+        /* let mut board_states: Vec<[Option<Piece>; 64]>;
 
         match sq {
 
             (sq > 16) => board_states.push(self.make_move_clone(sq, sq - 17)),
             _ => (),
 
-        }
+        } */
 
 
 
@@ -285,3 +311,4 @@ fn init_board() -> [Option<Piece>; 64] {
 
     return board;
 }
+
